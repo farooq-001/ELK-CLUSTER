@@ -40,6 +40,15 @@ sudo tee /opt/farooq/config/pipelines.yml <<EOF
 EOF
 
 sudo tee /opt/farooq/pipeline/logstashpluggin.conf  <<EOF
+#input {
+#  kafka {
+#    bootstrap_servers => "localhost:9092"
+#    topics => ["your-kafka-topic"]
+#    group_id => "logstash-consumer-group"
+#    codec => "json"
+#  }
+#}
+
 input { tcp { port => 12000 } }
 filter { 
 json { source => "message" } 
