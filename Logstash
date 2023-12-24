@@ -22,7 +22,28 @@ sudo service logstash start
 sudo chkconfig --add logstash
 sudo netstat -na | grep 9600
 sudo mkdir /opt/farooq
-sudo cp -r /etc/logstash    /opt/farooq
+sudo mkdir /opt/farooq/config
+sudo mkdir /opt/farooq/pipeline
+sudo rm -rf /opt/farooq/logstash/startup.options
+sudo rm -rf /opt/farooq/logstash/logstash-sample.conf
+sudo rm -rf /opt/farooq/logstash/conf.d
+sudo rm -rf /opt/farooq/logstash/pipelines.yml
+sudo cp -r /etc/logstash/*    /opt/farooq/config/
+
+sudo tee /opt/farooq/config/pipelines.yml <<EOF
+   - pipeline.id: farooq
+     pipeline.workers: 2
+     pipeline.batch.size: 300
+     pipeline.batch.delay: 50
+     path.config: "/opt/farooq/pipeline/*.conf"
+EOF
+
+sudo tee /opt/farooq/pipeline/logstashpluggin.conf  <<EOF
+input { tcp { port => 12000 } }
+filter { json { source => "message" } }
+output { stdout { codec => rubydebug } }
+
+EOF
 
 #Create a Logstash service file:
 sudo tee /etc/systemd/system/logstash.service <<EOF
