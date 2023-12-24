@@ -101,7 +101,7 @@ sudo yum install nc -y
 sudo yum update -y
 echo -f  "sudo systemctl status logstash"
 echo  -f "sudo journalctl -u logstash"
-sleep 35
+sleep 1m
 netstat -na | grep 12000
 
 
