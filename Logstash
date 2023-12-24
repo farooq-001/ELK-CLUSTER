@@ -1,7 +1,7 @@
 #!/bin/bash
 # Connect to your EC2 instance:
 ssh -i your-key-pair.pem ec2-user@your-ec2-instance-ip
-sudo yum update -y
+# sudo yum install htop -y
 sudo rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch
 
 #logstash-repo
@@ -89,7 +89,6 @@ sudo systemctl daemon-reload
 sudo systemctl start logstash
 sudo systemctl enable logstash
 
-# sudo journalctl -u logstash
 # Install firewalld
 sudo yum install -y firewalld
 sudo systemctl start firewalld
@@ -99,7 +98,9 @@ sudo firewall-cmd --zone=public --add-port=12000-14000/udp --permanent
 sudo firewall-cmd --reload
 sudo firewall-cmd --list-ports
 sudo yum install nc -y
-sudo systemctl status logstash
+sudo yum update -y
+echo "sudo systemctl status logstash"
+sudo journalctl -u logstash
 
 
 
