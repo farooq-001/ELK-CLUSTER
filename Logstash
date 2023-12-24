@@ -1,4 +1,4 @@
-#!/bin/bash
+c#!/bin/bash
 # Connect to your EC2 instance:
 ssh -i your-key-pair.pem ec2-user@your-ec2-instance-ip
 # sudo yum install htop -y
@@ -99,9 +99,10 @@ sudo firewall-cmd --reload
 sudo firewall-cmd --list-ports
 sudo yum install nc -y
 sudo yum update -y
-echo "sudo systemctl status logstash"
-sudo journalctl -u logstash
-
+echo -f  "sudo systemctl status logstash"
+echo  -f "sudo journalctl -u logstash"
+sleep 35
+netstat -na | grep 12000
 
 
 
