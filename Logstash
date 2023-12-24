@@ -44,6 +44,7 @@ input { tcp { port => 12000 } }
 filter { 
 json { source => "message" } 
   mutate {
+    rename => { "message" => "Raw-Message" }
     add_field => {
       "Organization-Name" => "BSN-TECH_TECHSOLUTIONS"
       "Organization-Founder" => "BABAFAROOQSN"
@@ -52,8 +53,11 @@ json { source => "message" }
       "Org-State"  => "AP-STATE"
       "Contact-Number" => "91766********"
     }
-    rename => { "message" => "Raw-Message" }
-    remove_field => ["_jsonparsefailure"]
+  }
+   if "_jsonparsefailure" in [tags] {
+    mutate {
+      remove_tag => ["_jsonparsefailure", "_grokparsefailure", "_mutate_error", "_kv_filter_error"]
+    }
   }
 }
 output { stdout { codec => rubydebug } }
