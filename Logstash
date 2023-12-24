@@ -41,7 +41,20 @@ EOF
 
 sudo tee /opt/farooq/pipeline/logstashpluggin.conf  <<EOF
 input { tcp { port => 12000 } }
-filter { json { source => "message" } }
+filter { 
+json { source => "message" } 
+  mutate {
+    add_field => {
+      "Organization-Name" => "[BSN-TECH][TECHSOLUTIONS]"
+      "Organization-Founder" => "[BABA][FAROOQ][SN]"
+      "ORG-ID" => "SND-9154-001"
+      "ORG-Location" => "[AMARAVATHI][AP-STATE]"
+      "Contact-Number" => "[91766********]"
+    }
+    rename => { "message" => "Raw-Message" }
+    remove_field => ["_jsonparsefailure"]
+  }
+}
 output { stdout { codec => rubydebug } }
 
 EOF
