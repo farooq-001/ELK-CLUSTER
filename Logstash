@@ -45,11 +45,12 @@ filter {
 json { source => "message" } 
   mutate {
     add_field => {
-      "Organization-Name" => "[BSN-TECH][TECHSOLUTIONS]"
-      "Organization-Founder" => "[BABA][FAROOQ][SN]"
-      "ORG-ID" => "SND-9154-001"
-      "ORG-Location" => "[AMARAVATHI][AP-STATE]"
-      "Contact-Number" => "[91766********]"
+      "Organization-Name" => "BSN-TECH_TECHSOLUTIONS"
+      "Organization-Founder" => "BABAFAROOQSN"
+      "Org-ID" => "SND-9154-001"
+      "Org-Location" => "AMARAVATHI"
+      "Org-State"  => "AP-STATE"
+      "Contact-Number" => "91766********"
     }
     rename => { "message" => "Raw-Message" }
     remove_field => ["_jsonparsefailure"]
