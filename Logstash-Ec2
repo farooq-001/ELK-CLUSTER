@@ -146,6 +146,8 @@ sudo firewall-cmd --zone=public --add-port=12000-14000/tcp --permanent
 sudo firewall-cmd --zone=public --add-port=12000-14000/udp --permanent
 sudo firewall-cmd --reload
 sudo firewall-cmd --list-ports
+
+sleep 15
 sudo yum install nc -y
 sudo yum update -y
 echo   "sudo systemctl status logstash"
