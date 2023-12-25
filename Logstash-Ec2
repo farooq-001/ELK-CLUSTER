@@ -168,8 +168,8 @@ sudo systemctl status logstash -l -n 100000
 ##############################################################################################################################################################################################################
         echo "SNB-Chat-bot: Logstash installation completed!"
     else
-        echo "SNB-Chat-bot: Okay, stopping the process. If you change your mind, feel free to restart the chatbot $name."
+        echo "SNB-Chat-bot: Okay, stopping the process. If you change your mind, feel free to restart the chatbot Mr/Mis $name."
     fi
 else
-    echo "SNB-Chat-bot: Okay, stopping the process. If you change your mind, feel free to restart the chatbot $name."
+    echo "SNB-Chat-bot: Okay, stopping the process. If you change your mind, feel free to restart the chatbot Mr/Mis $name."
 fi
