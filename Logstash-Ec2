@@ -1,0 +1,175 @@
+#!/bin/bash
+
+# Function to display messages and get user input
+get_input() {
+    echo "SNB-Chat-bot: $1"
+    read -r user_input
+}
+
+# Welcome message
+echo "SNB-Chat-bot: Hi, what's your name?"
+read -r name
+
+# Greet the user by name
+echo "SNB-Chat-bot: Hi $name!"
+
+# Ask if the user wants to continue
+get_input "Do you want to continue? (yes/no)"
+
+# Check the user's response
+if [[ "$user_input" =~ ^[Yy] ]]; then
+    echo "SNB-Chat-bot: Great! You need to install Logstash. Do you want to proceed? (yes/no)"
+
+    # Check the user's response
+    get_input "Do you want to install Logstash? (yes/no)"
+    
+    # Check the user's response
+    if [[ "$user_input" =~ ^[Yy] ]]; then
+        # Execute the installation script
+        echo "SNB-Chat-bot: Installing Logstash..."
+
+##############################################################################################################
+echo  --------------"It will be start 30 Sec"------------
+sleep 30
+sudo yum update -y
+sudo yum install htop -y
+# Connect to your EC2 instance:
+# ssh -i your-key-pair.pem ec2-user@your-ec2-instance-ip
+sleep 5
+
+sudo yum install htop -y
+sudo rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch
+
+#logstash-repo
+sudo tee /etc/yum.repos.d/logstash.repo <<EOF
+[logstash]
+name=Elastic repository for 7.x packages
+baseurl=https://artifacts.elastic.co/packages/7.x/yum
+gpgcheck=1
+gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
+enabled=1
+autorefresh=1
+type=rpm-md
+EOF
+
+#logstash-install
+sudo yum install logstash -y
+sudo service logstash start
+sudo chkconfig --add logstash
+sudo netstat -na | grep 9600
+sudo mkdir /opt/farooq
+sudo mkdir /opt/farooq/config
+sudo mkdir /opt/farooq/pipeline
+sudo rm -rf /opt/farooq/logstash/pipelines.yml
+sudo cp -r /etc/logstash/*    /opt/farooq/config/
+
+sudo rm -rf /opt/farooq/config/startup.options
+sudo rm -rf /opt/farooq/config/logstash-sample.conf
+sudo rm -rf /opt/farooq/config/conf.d
+
+sudo tee /opt/farooq/config/pipelines.yml <<EOF
+   - pipeline.id: farooq
+     pipeline.workers: 2
+     pipeline.batch.size: 300
+     pipeline.batch.delay: 50
+     path.config: "/opt/farooq/pipeline/*.conf"
+EOF
+
+sudo tee /opt/farooq/pipeline/logstashpluggin.conf  <<EOF
+#input {
+#  kafka {
+#    bootstrap_servers => "localhost:9092"
+#    topics => ["your-kafka-topic"]
+#    group_id => "logstash-consumer-group"
+#    codec => "json"
+#  }
+#}
+
+input { tcp { port => 12000 } }
+filter { 
+json { source => "message" } 
+  mutate {
+    rename => { "message" => "Raw-Message" }
+    add_field => {
+      "Organization-Name" => "BSN-TECH_TECHSOLUTIONS"
+      "Organization-Founder" => "BABAFAROOQSN"
+      "Org-ID" => "SND-9154-001"
+      "Org-Location" => "AMARAVATHI"
+      "Org-State"  => "AP-STATE"
+      "Contact-Number" => "91766********"
+    }
+  }
+   if "_jsonparsefailure" in [tags] {
+    mutate {
+      remove_tag => ["_jsonparsefailure", "_grokparsefailure", "_mutate_error", "_kv_filter_error"]
+    }
+  }
+}
+output { stdout { codec => rubydebug } }
+
+EOF
+
+#Create a Logstash service file:
+sudo tee /etc/systemd/system/logstash.service <<EOF
+[Unit]
+Description=logstash
+After=network.target
+
+[Service]
+#User=farooq
+Type=simple
+WorkingDirectory=/opt/farooq
+User=logstash
+Group=logstash
+
+EnvironmentFile=-/etc/default/logstash
+EnvironmentFile=-/etc/sysconfig/logstash
+ExecStart=/usr/share/logstash/bin/logstash "--path.settings" "/opt/farooq/config"
+RemainAfterExit=yes
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
+
+EOF
+
+sudo systemctl daemon-reload
+sudo systemctl start logstash
+sudo systemctl enable logstash
+
+# Install firewalld
+sudo yum install -y firewalld
+sudo systemctl start firewalld
+sudo systemctl enable firewalld
+sudo firewall-cmd --zone=public --add-port=12000-14000/tcp --permanent
+sudo firewall-cmd --zone=public --add-port=12000-14000/udp --permanent
+sudo firewall-cmd --reload
+sudo firewall-cmd --list-ports
+sudo yum install nc -y
+sudo yum update -y
+echo   "sudo systemctl status logstash"
+echo   "sudo journalctl -u logstash"
+sleep 60
+sleep 20
+netstat -na | grep 12000
+
+echo ---------waite for 50 sec then it will be showing Logstash service & ports status-----------
+sleep 58
+# Connect to 127.0.0.1 on port 12000 using netcat
+
+nc 127.0.0.1 12000 <<EOL
+Dec 25 20:05:50 farooq-NS14A8 systemd[1]: king.service: Scheduled restart job, restart counter is at 7143.
+EOL
+
+sleep 30
+sudo systemctl status logstash -l -n 100000
+
+##############################################################################################################################################################################################################
+        echo "SNB-Chat-bot: Logstash installation completed!"
+    else
+        echo "SNB-Chat-bot: Okay, stopping the process. If you change your mind, feel free to restart the chatbot $name."
+    fi
+else
+    echo "SNB-Chat-bot: Okay, stopping the process. If you change your mind, feel free to restart the chatbot $name."
+fi
