@@ -1,0 +1,87 @@
+#!/bin/bash
+sudo mkdir /opt/farooq-aws
+sudo cp -r /opt/farooq/* /opt/farooq-aws/
+sudo rm -rf /opt/farooq-aws/pipeline/*
+sudo rm -rf /opt/farooq-aws/config/pipelines.yml
+
+sudo tee /opt/farooq-aws/config/pipelines.yml <<EOF
+- pipeline.id: aws
+  pipeline.workers: 2
+  pipeline.batch.size: 300
+  pipeline.batch.delay: 50
+  path.config: "/opt/farooq-aws/pipeline/*.conf"
+EOF
+
+sudo tee /opt/farooq-aws/pipeline/logstashpluggin.conf <<EOF
+input {
+  file {
+    path => [
+      "/var/log/syslog"
+      "/var/log/*.log",                 ,
+      "/var/log/auth.log",
+      "/var/log/audit/*",
+      "/var/log/cloud-init.log",
+      "/var/log/cloud-init-output.log",
+      "/var/log/hawkey.log"
+    ]
+    start_position => "beginning"
+  }
+}
+
+filter { 
+  json { source => "message" }
+  grok {
+    match => { "message" => "%{TIMESTAMP_ISO8601:timestamp} %{LOGLEVEL:loglevel} %{GREEDYDATA:log_message}" }
+  }
+  mutate { 
+    rename => { "message" => "Raw-Message" }
+    add_field => {
+      "Organization-Name" => "BSN-TECH_TECHSOLUTIONS"
+      "Organization-Founder" => "BABAFAROOQSN"
+      "Org-ID" => "SND-9154-001"
+      "Org-Location" => "AMARAVATHI"
+      "Org-State"  => "AP-STATE"
+      "Contact-Number" => "91766********"
+    }
+  }
+   if "_jsonparsefailure" in [tags] {
+    mutate {
+      remove_tag => ["_jsonparsefailure", "_grokparsefailure", "_mutate_error", "_kv_filter_error"]
+    }
+  }
+
+}
+
+output {
+  stdout {
+    codec => rubydebug
+  }
+EOF
+
+sudo tee /etc/systemd/system/logstash-aws.service <<EOF
+[Unit]
+Description=logstash-aws
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/farooq
+User=logstash
+Group=logstash
+
+EnvironmentFile=-/etc/default/logstash
+EnvironmentFile=-/etc/sysconfig/logstash
+ExecStart=/usr/share/logstash/bin/logstash "--path.settings" "/opt/farooq-aws/config"
+RemainAfterExit=yes
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+echo "Setup script executed successfully."
+
+sudo systemctl enable logstash-aws.service 
+sudo systemctl start logstash-aws.service
+journalctl -f
