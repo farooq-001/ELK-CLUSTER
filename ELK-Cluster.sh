@@ -64,6 +64,7 @@ path.logs: /var/log/elasticsearch
 # Require explicit names when deleting indices:
 #action.destructive_requires_name: true
 EOF"
-
+sudo systemctl start elasticsearch
 echo "Elasticsearch configuration file has been updated successfully."
-sleep 10
+sleep 15
+sudo systemctl status elasticsearch
