@@ -1,4 +1,5 @@
 #!/bin/bash
+# https://logz.io/blog/elasticsearch-cluster-tutorial/
 
 # Define variables
 ELASTICSEARCH_DEB_FILE="elasticsearch-7.17.2-amd64.deb"
