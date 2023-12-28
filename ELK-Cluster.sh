@@ -32,39 +32,30 @@ sudo systemctl daemon-reload
 sudo systemctl enable elasticsearch
 
 # Edit Elasticsearch configuration file on machine
-sudo sh -c "cat <<EOF > /etc/elasticsearch/elasticsearch.yml
-#--------------------------------- Cluster Settings -----------------------------
-# Use a descriptive name for your cluster:
-cluster.name: $CLUSTER_NAME
-
-#---------------------------------- Node Settings -------------------------------
-# Use a descriptive name for the node:
-node.name: $NODE_NAME
-node.data: $DATA_NODE
-node.master: $MASTER_NODE
-
-# ----------------------------------- Memory -----------------------------------
-# Lock the memory on startup:
-#bootstrap.memory_lock: true
-
-#-------------------------------- Network Settings -----------------------------
-network.host: $NETWORK_HOST
-http.port: $HTTP_PORT
-
-#--------- Discovery Settings ---------
-discovery.seed_hosts: ["172.31.23.88", "172.31.31.243", "172.31.20.58", "172.31.16.177"]
-cluster.initial_master_nodes: ["172.31.23.88", "172.31.31.243", "172.31.20.58", "172.31.16.177"]
-
-# ----------------------------------- Paths ------------------------------------
-# Path to directory where to store the data (separate multiple locations by comma):
-path.data: /var/lib/elasticsearch
+#sudo sh -c "cat <<EOF > /etc/elasticsearch/elasticsearch.yml
+##--------------------------------- Cluster Settings -----------------------------
+## Use a descriptive name for your cluster:
+#cluster.name: $CLUSTER_NAME
+##---------------------------------- Node Settings -------------------------------
+## Use a descriptive name for the node:
+#node.name: $NODE_NAME
+#node.data: $DATA_NODE
+#node.master: $MASTER_NODE
+##-------------------------------- Network Settings -----------------------------
+#network.host: $NETWORK_HOST
+#http.port: $HTTP_PORT
+##--------- Discovery Settings ---------
+#discovery.seed_hosts: ["172.31.23.88", "172.31.31.243", "172.31.20.58", "172.31.16.177"]
+#cluster.initial_master_nodes: ["172.31.23.88", "172.31.31.243", "172.31.20.58", "172.31.16.177"]
+## ----------------------------------- Paths ------------------------------------
+## Path to directory where to store the data (separate multiple locations by comma):
+#path.data: /var/lib/elasticsearch
 # Path to log files:
-path.logs: /var/log/elasticsearch
-
-# ---------------------------------- Various -----------------------------------
-# Require explicit names when deleting indices:
-#action.destructive_requires_name: true
-EOF"
+#path.logs: /var/log/elasticsearch
+## ---------------------------------- Various -----------------------------------
+##Require explicit names when deleting indices:
+##action.destructive_requires_name: true
+#EOF"
 sudo systemctl start elasticsearch
 echo "Elasticsearch configuration file has been updated successfully."
 sleep 15
