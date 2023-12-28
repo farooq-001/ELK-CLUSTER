@@ -15,6 +15,10 @@ sudo apt update
 
 # Upgrade installed packages
 sudo apt upgrade -y
+sudo apt install default-jre -y
+export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+export PATH=$PATH:$JAVA_HOME/bin
+source .bashrc
 
 # Check if Elasticsearch package already exists
 if [ -f "$ELASTICSEARCH_DEB_FILE" ]; then
