@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# Download and Install Metricbeat
+curl -L -O https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-7.17.0-amd64.deb
+sudo dpkg -i metricbeat-7.17.0-amd64.deb
+
+# Configure Metricbeat
+cat << EOF | sudo tee /etc/metricbeat/metricbeat.yml
+metricbeat.modules:
+- module: system
+  metricsets:
+    - cpu
+    - memory
+    - network
+    - process
+  period: 10s
+  processes: ['.*']
+
+output.elasticsearch:
+  hosts: ["your_elasticsearch_host:9200"]
+  username: "your_elasticsearch_username"
+  password: "your_elasticsearch_password"
+EOF
+
+# Enable Metricbeat system module
+sudo metricbeat modules enable system
+
+# Start Metricbeat service
+sudo service metricbeat start
+
+# Display status and logs
+sudo service metricbeat status
+sudo journalctl -u metricbeat
