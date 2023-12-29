@@ -1,0 +1,43 @@
+#!/bin/bash
+
+# Elasticsearch Commands
+echo "Checking Cluster Health:"
+curl -X GET "http://localhost:9200/_cluster/health?pretty"
+
+echo -e "\nListing Nodes in the Cluster:"
+curl -X GET "http://localhost:9200/_cat/nodes?v"
+
+echo -e "\nListing Indices:"
+curl -X GET "http://localhost:9200/_cat/indices?v"
+
+echo -e "\nCreating Index:"
+curl -X PUT "http://localhost:9200/your_index"
+
+echo -e "\nDeleting Index:"
+curl -X DELETE "http://localhost:9200/your_index"
+
+echo -e "\nIndexing Document:"
+curl -X POST "http://localhost:9200/your_index/your_type" -H 'Content-Type: application/json' -d '{"field": "value"}'
+
+# Logstash Commands
+echo -e "\nRunning Logstash Config File:"
+logstash -f your_config_file.conf
+
+echo -e "\nChecking Logstash Version:"
+logstash --version
+
+echo -e "\nTesting Logstash Configuration:"
+logstash --config.test_and_exit -f your_config_file.conf
+
+# Kibana Commands
+echo -e "\nStarting Kibana:"
+systemctl start kibana
+
+echo -e "\nStopping Kibana:"
+systemctl stop kibana
+
+echo -e "\nRestarting Kibana:"
+systemctl restart kibana
+
+echo -e "\nChecking Kibana Status:"
+systemctl status kibana
