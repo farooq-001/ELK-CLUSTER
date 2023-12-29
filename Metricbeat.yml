@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# Specify Metricbeat version
+VERSION="7.17.16"
+
+# Download Metricbeat
+wget https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-${VERSION}-linux-x86_64.tar.gz
+
+# Extract the archive
+tar -zxvf metricbeat-${VERSION}-linux-x86_64.tar.gz
+
+# Move Metricbeat to /usr/share
+sudo mv metricbeat-${VERSION}-linux-x86_64 /usr/share/metricbeat
+
+# Navigate to the Metricbeat directory
+cd /usr/share/metricbeat
+
+# Create a backup of the original configuration file
+sudo cp metricbeat.yml metricbeat.yml.orig
+
+# Edit Metricbeat configuration
+sudo nano metricbeat.yml
+
+# Set up Metricbeat as a service
+sudo tee /etc/systemd/system/metricbeat.service > /dev/null <<EOL
+[Unit]
+Description=Metricbeat is a lightweight shipper for metrics
+Documentation=https://www.elastic.co/beats/metricbeat
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+ExecStart=/usr/share/metricbeat/bin/metricbeat -e
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+EOL
+
+# Enable and start Metricbeat
+sudo systemctl enable metricbeat
+sudo systemctl start metricbeat
+
+# Verify Metricbeat status
+sudo systemctl status metricbeat
