@@ -1,0 +1,94 @@
+#!/bin/bash
+APP_PATH=/opt/farooq
+LOG_PATH=/var/log
+LOG_FILE=blu-sysprep.log
+
+SE_CONFIG=/etc/selinux/config
+SUDOERS=/etc/sudoers
+
+BABA_USER=farooq
+BABA_PASSWD='ALLAH@786'
+
+exec > >(tee -i $LOG_PATH/$LOG_FILE)
+exec 2>&1
+
+prompt_confirm() {
+  while true; do
+    read -r -n 1 -p "${1:-Continue?} [y/n]: " REPLY
+    case $REPLY in
+      [yY]) echo ; return 0 ;;
+      [nN]) echo ; return 1 ;;
+      *) printf " \033[31m %s \n\033[0m" "Invalid input"
+    esac 
+  done  
+}
+
+if [ "$USER" != "root" ]; then
+    echo ""
+    echo 'Invalid User!!! Please login as root and rerun the script.'
+    echo ""
+    exit 0
+fi
+
+echo -n "Checking for Internet access..."
+IP=$(curl -s ipinfo.io/ip 2> /dev/null)
+if [[ $? -eq 0 ]]; then
+    echo " Online."
+    echo ""
+else
+    echo " Offline."
+    echo ""
+    echo "Check internet access and rerun script. Terminating Script!"
+    exit 1
+fi
+
+if grep -q SELINUX=enforcing "$SE_CONFIG"; then
+    sed -i "s/^SELINUX=enforcing.*$/SELINUX=permissive/g" $SE_CONFIG
+    echo ""
+    echo "SELinux in enforcing mode, changed to permissive."
+    echo ""
+fi
+
+sed -i 's/#PermitRootLogin/PermitRootLogin/g' /etc/ssh/sshd_config
+sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+systemctl restart sshd
+
+if ! id -u $BABA_USER &>/dev/null; then
+    echo ""
+    echo "Adding user $BABA_USER."
+    id -u $BABA_USER &>/dev/null || useradd -G wheel $BABA_USER
+    echo $BABA_PASSWD | passwd --stdin $BABA_USER
+    echo ""
+fi
+
+if ! grep -q $BABA_USER "$SUDOERS"; then
+    echo ""
+    echo "Adding $BABA_USER user to $SUDOERS"
+    sed -i "111i$BABA_USER     ALL=(ALL)       NOPASSWD: ALL" $SUDOERS
+    echo ""
+fi
+
+echo "Changing timezone to UTC.."
+ln -f -s /usr/share/zoneinfo/UTC /etc/localtime
+localectl set-locale LANG=en_US.UTF-8
+
+if [ -f "/etc/yum.repos.d/Centos-PowerTools.repo" ] ; then
+    sed -i "s/enabled=0/enabled=1/g"  /etc/yum.repos.d/Centos-PowerTools.repo
+fi
+
+if [ -f "/etc/yum.repos.d/Rocky-PowerTools.repo" ] ; then
+    sed -i "s/enabled=0/enabled=1/g"  /etc/yum.repos.d/Rocky-PowerTools.repo
+fi
+
+yum -y install epel-release
+yum -y update
+
+yum -y install htop vim nano net-tools wget firewalld tar tcpdump nc bind-utils glibc-langpack-en
+systemctl enable firewalld
+systemctl start firewalld
+
+mkdir -p /opt/farooq
+touch /opt/farooq/.sysprep
+echo "Sysprep completed."
+echo ""
+
