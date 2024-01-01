@@ -1,0 +1,71 @@
+winlogbeat.event_logs:
+  - name: Application
+    ignore_older: 15m
+    fields:
+      log: "windows-log"
+     ORG-ID: "BABA-001-SN"
+     ORG-ORG-SESSION-ID: "BSN-S-001"
+  - name: Security
+    ignore_older: 15m
+    fields:
+      log: "windows-log"
+     ORG-ID: "BABA-001-SN"
+     ORG-ORG-SESSION-ID: "BSN-S-001"
+  - name: System
+    ignore_older: 15m
+    fields:
+      log: "windows-log"
+     ORG-ID: "BABA-001-SN"
+     ORG-ORG-SESSION-ID: "BSN-S-001"
+  - name: BluArmour
+    ignore_older: 15m
+    fields:
+      log: "windows-log"
+     ORG-ID: "BABA-001-SN"
+     ORG-ORG-SESSION-ID: "BSN-S-001"
+  - name: Microsoft-Windows-Windows Defender/Operational
+    ignore_older: 15m
+    fields:
+      log: "windows-log"
+     ORG-ID: "BABA-001-SN"
+     ORG-ORG-SESSION-ID: "BSN-S-001"
+  - name: Microsoft-windows-Sysmon/Operational
+    ignore_older: 15m
+    fields:
+      log: "windows-log"
+     ORG-ID: "BABA-001-SN"
+     ORG-ORG-SESSION-ID: "BSN-S-001"
+  - name: Microsoft-windows-PowerShell/Operational
+    ignore_older: 15m
+    fields:
+      log: "windows-log"
+     ORG-ID: "BABA-001-SN"
+     ORG-ORG-SESSION-ID: "BSN-S-001"
+  - name: Windows PowerShell
+    ignore_older: 15m
+    fields:
+      log: "windows-log"
+     ORG-ID: "BABA-001-SN"
+     ORG-ORG-SESSION-ID: "BSN-S-001"
+  - name: Microsoft-Windows-WMI-Activity/Operational
+    ignore_older: 15m
+    fields:
+      log: "windows-log"
+     ORG-ID: "BABA-001-SN"
+     ORG-ORG-SESSION-ID: "BSN-S-001"
+  - name: Microsoft-windows-TaskScheduler/Operational
+    ignore_older: 15m
+    fields:
+      log: "windows-log"
+     ORG-ID: "BABA-001-SN"
+     ORG-ORG-SESSION-ID: "BSN-S-001"
+
+output.logstash:
+  # The Logstash hosts
+  codec.json:
+    pretty: true
+ 
+  hosts: ["logstash_ipadd:12102"]
+
+
+  winlogbeat.registry_file: C:/Program Files/winlogbeat/.winlogbeat.yml
