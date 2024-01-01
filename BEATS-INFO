@@ -1,0 +1,50 @@
+Here is a list of some Elastic Beats commonly used with the ELK (Elasticsearch, Logstash, Kibana) stack, along with a brief single-line explanation for each:
+
+1. Filebeat:
+   - Explanation: Lightweight log shipper for forwarding log files to Elasticsearch or Logstash.
+
+2. Metricbeat:
+   - Explanation: Collects system and service metrics from the operating system and services running on the server.
+
+3. Packetbeat:
+   - Explanation: Network packet analyzer that monitors traffic between applications and services for performance analysis.
+
+4. Auditbeat:
+   - Explanation: Collects Linux audit framework data for security monitoring and auditing.
+
+5. Heartbeat:
+   - Explanation: Monitors uptime and availability of services, applications, or servers.
+
+6. Winlogbeat:
+   - Explanation: Collects Windows event logs for monitoring and analysis in the ELK stack.
+
+7. Journalbeat:
+   - Explanation: Collects data from the systemd journal on Linux systems for analysis in ELK.
+
+8. Functionbeat:
+   - Explanation: Serverless data shipper that sends events directly to Elasticsearch from cloud functions or serverless environments.
+
+9. Osquerybeat:
+   - Explanation: Integrates Osquery with the ELK stack for querying and analyzing system-level information.
+
+10. AWS Elastic Filebeat Module:
+    - Explanation: Filebeat module tailored for collecting logs from various AWS services.
+
+11. AWS Metricbeat Module:
+    - Explanation: Metricbeat module designed for collecting metrics from various AWS services.
+
+12. Google Cloud Platform (GCP) Module for Beats:
+    - Explanation: Integration module for Beats to collect logs and metrics from Google Cloud services.
+
+13. NGINX Module for Beats:
+    - Explanation: Filebeat and Metricbeat modules for collecting NGINX logs and metrics.
+
+14. Apache Module for Beats:
+    - Explanation: Filebeat and Metricbeat modules for collecting Apache logs and metrics.
+
+15. Cisco Module for Beats:
+    - Explanation: Filebeat and Metricbeat modules for collecting Cisco network device logs and metrics.
+
+These Beats, when used in conjunction with Elasticsearch and Kibana, provide a powerful platform for log and metric analysis, monitoring, and visualization. 
+
+
