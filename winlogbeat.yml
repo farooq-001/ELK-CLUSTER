@@ -3,69 +3,66 @@ winlogbeat.event_logs:
     ignore_older: 15m
     fields:
       log: "windows-log"
-     ORG-ID: "BABA-001-SN"
-     ORG-ORG-SESSION-ID: "BSN-S-001"
+      organization-id: "Snb-Tech-9141"
+      organization-name: "Snb-Tech-Solutions"
   - name: Security
     ignore_older: 15m
     fields:
       log: "windows-log"
-     ORG-ID: "BABA-001-SN"
-     ORG-ORG-SESSION-ID: "BSN-S-001"
+      organization-id: "Snb-Tech-9141"
+      organization-name: "Snb-Tech-Solutions"
   - name: System
     ignore_older: 15m
     fields:
       log: "windows-log"
-     ORG-ID: "BABA-001-SN"
-     ORG-ORG-SESSION-ID: "BSN-S-001"
+      organization-id: "Snb-Tech-9141"
+      organization-name: "Snb-Tech-Solutions"
   - name: BluArmour
     ignore_older: 15m
     fields:
       log: "windows-log"
-     ORG-ID: "BABA-001-SN"
-     ORG-ORG-SESSION-ID: "BSN-S-001"
+      organization-id: "Snb-Tech-9141"
+      organization-name: "Snb-Tech-Solutions"
   - name: Microsoft-Windows-Windows Defender/Operational
     ignore_older: 15m
     fields:
       log: "windows-log"
-     ORG-ID: "BABA-001-SN"
-     ORG-ORG-SESSION-ID: "BSN-S-001"
+      organization-id: "Snb-Tech-9141"
+      organization-name: "Snb-Tech-Solutions"
   - name: Microsoft-windows-Sysmon/Operational
     ignore_older: 15m
     fields:
       log: "windows-log"
-     ORG-ID: "BABA-001-SN"
-     ORG-ORG-SESSION-ID: "BSN-S-001"
+      organization-id: "Snb-Tech-9141"
+      organization-name: "Snb-Tech-Solutions"
   - name: Microsoft-windows-PowerShell/Operational
     ignore_older: 15m
     fields:
       log: "windows-log"
-     ORG-ID: "BABA-001-SN"
-     ORG-ORG-SESSION-ID: "BSN-S-001"
+      organization-id: "Snb-Tech-9141"
+      organization-name: "Snb-Tech-Solutions"
   - name: Windows PowerShell
     ignore_older: 15m
     fields:
       log: "windows-log"
-     ORG-ID: "BABA-001-SN"
-     ORG-ORG-SESSION-ID: "BSN-S-001"
+      organization-id: "Snb-Tech-9141"
+      organization-name: "Snb-Tech-Solutions"
   - name: Microsoft-Windows-WMI-Activity/Operational
     ignore_older: 15m
     fields:
       log: "windows-log"
-     ORG-ID: "BABA-001-SN"
-     ORG-ORG-SESSION-ID: "BSN-S-001"
+      organization-id: "Snb-Tech-9141"
+      organization-name: "Snb-Tech-Solutions"
   - name: Microsoft-windows-TaskScheduler/Operational
     ignore_older: 15m
     fields:
       log: "windows-log"
-     ORG-ID: "BABA-001-SN"
-     ORG-ORG-SESSION-ID: "BSN-S-001"
+      organization-id: "Snb-Tech-9141"
+      organization-name: "Snb-Tech-Solutions"
 
 output.logstash:
-  # The Logstash hosts
+  hosts: ["logstash_ipadd:12102"]
   codec.json:
     pretty: true
- 
-  hosts: ["logstash_ipadd:12102"]
 
-
-  winlogbeat.registry_file: C:/Program Files/winlogbeat/.winlogbeat.yml
+winlogbeat.registry_file: C:/Program Files/winlogbeat/.winlogbeat.yml
