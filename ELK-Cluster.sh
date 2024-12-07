@@ -7,7 +7,7 @@ CLUSTER_NAME="ELK-CLUSTER"
 NODE_NAME="ELK-NODE-1"
 DATA_NODE=true
 MASTER_NODE=true
-NETWORK_HOST="172.31.8.9"
+NETWORK_HOST="35.172.229.58"
 HTTP_PORT=9200
 
 # Update package list
@@ -49,8 +49,8 @@ node.master: $MASTER_NODE
 network.host: $NETWORK_HOST
 http.port: $HTTP_PORT
 ##--------- Discovery Settings ---------
-discovery.seed_hosts: ["172.31.8.9", "172.31.6.35"]
-cluster.initial_master_nodes: ["172.31.6.35", "172.31.8.9"]
+discovery.seed_hosts: ["35.172.229.58", "54.196.239.103"]
+cluster.initial_master_nodes: ["35.172.229.58", "54.196.239.103"]
 ## ----------------------------------- Paths ------------------------------------
 ## Path to directory where to store the data (separate multiple locations by comma):
 #path.data: /var/lib/elasticsearch
