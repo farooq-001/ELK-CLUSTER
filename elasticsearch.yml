@@ -21,7 +21,7 @@
 #
 # Use a descriptive name for the node:
 #
- node.name: "node-3"
+ node.name: "node-1"
  node.data: true
  node.master: true
 #
@@ -71,11 +71,11 @@
 # Pass an initial list of hosts to perform discovery when this node is started:
 # The default list of hosts is ["127.0.0.1", "[::1]"]
 #
- discovery.seed_hosts: ["172.31.8.9", "172.31.6.35", "172.31.7.176"]
+ discovery.seed_hosts: ["35.172.229.58", "54.196.239.103", "172.31.7.176"]
 #
 # Bootstrap the cluster using an initial set of master-eligible nodes:
 #
- cluster.initial_master_nodes: ["node-1", "node-3"]
+ cluster.initial_master_nodes: ["node-1", "node-2"]
 #
 # For more information, consult the discovery and cluster formation module documentation.
 #
