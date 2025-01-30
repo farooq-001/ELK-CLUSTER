@@ -1,8 +1,10 @@
 #!/bin/bash
 
-# Default Elasticsearch host and port
+# Elasticsearch Configuration
 ES_HOST="localhost"
 ES_PORT="9200"
+ES_USER="root"   # User
+ES_PASS="babafarooq001@"   # Password
 
 # Function to display the menu
 show_menu() {
@@ -24,34 +26,34 @@ show_menu() {
     echo "--------------------------------------------"
 }
 
-# Function to execute commands based on user selection
+# Function to execute commands with authentication
 execute_command() {
     case $1 in
-        1) curl -X GET "$ES_HOST:$ES_PORT/_cluster/health?pretty" ;;
-        2) curl -X GET "$ES_HOST:$ES_PORT/_cluster/state?pretty" ;;
-        3) curl -X GET "$ES_HOST:$ES_PORT/_cluster/settings?pretty" ;;
-        4) curl -X GET "$ES_HOST:$ES_PORT/_cat/indices?v" ;;
+        1) curl -u "$ES_USER:$ES_PASS" -X GET "$ES_HOST:$ES_PORT/_cluster/health?pretty" ;;
+        2) curl -u "$ES_USER:$ES_PASS" -X GET "$ES_HOST:$ES_PORT/_cluster/state?pretty" ;;
+        3) curl -u "$ES_USER:$ES_PASS" -X GET "$ES_HOST:$ES_PORT/_cluster/settings?pretty" ;;
+        4) curl -u "$ES_USER:$ES_PASS" -X GET "$ES_HOST:$ES_PORT/_cat/indices?v" ;;
         5) 
             echo "Enter Index Name: "
             read index_name
-            curl -X PUT "$ES_HOST:$ES_PORT/$index_name?pretty"
+            curl -u "$ES_USER:$ES_PASS" -X PUT "$ES_HOST:$ES_PORT/$index_name?pretty"
             ;;
         6) 
             echo "Enter Index Name to Delete: "
             read index_name
-            curl -X DELETE "$ES_HOST:$ES_PORT/$index_name?pretty"
+            curl -u "$ES_USER:$ES_PASS" -X DELETE "$ES_HOST:$ES_PORT/$index_name?pretty"
             ;;
         7) 
             echo "Enter Index Name: "
             read index_name
-            curl -X GET "$ES_HOST:$ES_PORT/$index_name/_search?pretty"
+            curl -u "$ES_USER:$ES_PASS" -X GET "$ES_HOST:$ES_PORT/$index_name/_search?pretty"
             ;;
         8) 
             echo "Enter Index Name: "
             read index_name
             echo "Enter Document ID: "
             read doc_id
-            curl -X GET "$ES_HOST:$ES_PORT/$index_name/_doc/$doc_id?pretty"
+            curl -u "$ES_USER:$ES_PASS" -X GET "$ES_HOST:$ES_PORT/$index_name/_doc/$doc_id?pretty"
             ;;
         9) 
             echo "Enter Index Name: "
@@ -60,7 +62,7 @@ execute_command() {
             read doc_id
             echo "Enter JSON Data (e.g., {\"name\": \"John\"}):"
             read doc_data
-            curl -X POST "$ES_HOST:$ES_PORT/$index_name/_doc/$doc_id?pretty" -H "Content-Type: application/json" -d "$doc_data"
+            curl -u "$ES_USER:$ES_PASS" -X POST "$ES_HOST:$ES_PORT/$index_name/_doc/$doc_id?pretty" -H "Content-Type: application/json" -d "$doc_data"
             ;;
         10) 
             echo "Enter Index Name: "
@@ -69,14 +71,14 @@ execute_command() {
             read doc_id
             echo "Enter JSON Update Data (e.g., {\"doc\": {\"age\": 30}}):"
             read update_data
-            curl -X POST "$ES_HOST:$ES_PORT/$index_name/_update/$doc_id?pretty" -H "Content-Type: application/json" -d "$update_data"
+            curl -u "$ES_USER:$ES_PASS" -X POST "$ES_HOST:$ES_PORT/$index_name/_update/$doc_id?pretty" -H "Content-Type: application/json" -d "$update_data"
             ;;
         11) 
             echo "Enter Index Name: "
             read index_name
             echo "Enter Document ID to Delete: "
             read doc_id
-            curl -X DELETE "$ES_HOST:$ES_PORT/$index_name/_doc/$doc_id?pretty"
+            curl -u "$ES_USER:$ES_PASS" -X DELETE "$ES_HOST:$ES_PORT/$index_name/_doc/$doc_id?pretty"
             ;;
         12) exit 0 ;;
         *) echo "Invalid option. Please try again." ;;
