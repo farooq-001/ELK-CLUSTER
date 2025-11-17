@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  # Prometheus
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    network_mode: "host"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    restart: unless-stopped
+
+  # Grafana
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    network_mode: "host"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+    restart: unless-stopped
+
+  # Elasticsearch Exporter
+  es_exporter:
+    image: quay.io/prometheuscommunity/elasticsearch-exporter:latest
+    container_name: es_exporter
+    network_mode: "host"
+    environment:
+      ES_URI: "https://localhost:9200"
+      ES_USERNAME: "elastic"
+      ES_PASSWORD: "Sanem001@"
+      ES_SCHEME: "https"
+    restart: unless-stopped
+
+volumes:
+  prometheus_data:
+  grafana_data:
